@@ -1,21 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c"%>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>작성</title>
-</head>
-<body>
-	<div>작성</div>
-<form action="/usr/article/doModify">
-	<input type="hidden" name="id" value="${article.getId() }"/>
+<c:set var="pageTitle" value="수정" />
+<%@ include file="/view/usr/common/header.jsp"%>
+
+
+<div>작성</div>
+<form action="/usr/article/doModify" onsubmit="return submitForm(this);">
+	<input type="hidden" name="id" value="${article.getId() }" />
 	<table border="1">
 		<tr>
 			<th>번호</th>
-			<td> ${article.getId() }</td>
+			<td>${article.getId() }</td>
 		</tr>
 		<tr>
 			<th>작성일</th>
@@ -27,7 +24,8 @@
 		</tr>
 		<tr>
 			<th>제목</th>
-			<td><input type="text" name="title" value="${article.getTitle() }"/></td>
+			<td><input type="text" name="title"
+				value="${article.getTitle() }" /></td>
 		</tr>
 		<tr>
 			<th>내용</th>
@@ -42,5 +40,4 @@
 		</tr>
 	</table>
 </form>
-</body>
-</html>
+<%@ include file="/view/usr/common/footer.jsp"%>

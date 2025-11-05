@@ -55,7 +55,12 @@ public interface ArticleDao {
 			delete from article
 				where id = #{id}
 			""")
-	public void deleteArticle(int id); 
-
+	public void deleteArticle(int id);
+	
+	@Select("""
+			select last_insert_id()
+			""")
+	public int getLastArticleId(); 
+		
 	
 }
