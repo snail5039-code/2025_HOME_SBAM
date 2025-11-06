@@ -11,3 +11,22 @@ CREATE TABLE article(
 );
 
 SELECT * FROM article;
+SELECT * 
+	FROM article
+	ORDER BY id DESC;
+	
+CREATE TABLE `member`(
+	id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT
+	, regDate DATETIME NOT NULL
+	, updateDate DATETIME NOT NULL
+	, loginId VARCHAR(50) NOT NULL
+	, loginPw VARCHAR(100) NOT NULL
+	, `name` VARCHAR(20) NOT NULL
+);
+
+INSERT INTO `member`
+	SET regDate = NOW()
+		, updateDate = NOW()
+		, loginId = 'test2'
+		, loginPw = 'test2'
+		, `name` = 'test2';

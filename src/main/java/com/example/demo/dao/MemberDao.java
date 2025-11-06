@@ -1,0 +1,29 @@
+package com.example.demo.dao;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import com.example.demo.dto.Member;
+
+@Mapper
+public interface MemberDao {
+	
+	@Select("""
+			select * 
+				from member
+				where loginId = #{loginId}
+			""")
+	Member getMemberByLoigId(String loginId);
+	
+	@Insert("""
+			insert into member
+				set regDate = now()
+					, updateDate = now()
+					, loginId = #{loginId}
+					, loginPw = #{loginPw}
+					, name = #{name}
+ 			""")
+	void joinMember(String loginId, String loginPw, String name);
+	
+}
