@@ -23,4 +23,8 @@ public class MemberService {
 		this.memberDao.joinMember(loginId, loginPw, name);
 	}
 
+	public Member getLoginMember(String loginId, String loginPw) {
+		return this.memberDao.getLoginMember(loginId, loginPw);
+	}
+
 }

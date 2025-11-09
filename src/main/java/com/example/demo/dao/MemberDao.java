@@ -26,4 +26,11 @@ public interface MemberDao {
  			""")
 	void joinMember(String loginId, String loginPw, String name);
 	
+	@Select("""
+			select *
+				from member
+				where loginId = #{loginId} and loginPw = #{loginPw}
+			""")
+	Member getLoginMember(String loginId, String loginPw);
+	
 }

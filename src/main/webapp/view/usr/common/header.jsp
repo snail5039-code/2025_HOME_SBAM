@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
     
 <!DOCTYPE html>
 <html>
@@ -22,6 +24,12 @@
 	<div>
 		<a class="pr-10 pl-10 hover:underline" href="/usr/home/main">홈</a>
 		<a class="pr-10 pl-10 hover:underline" href="/usr/article/list">리스트</a>
+	<c:if test="${sessionScope.member == null }">
 		<a class="pr-10 pl-10 hover:underline" href="/usr/member/join">회원가입</a>
+		<a class="pr-10 pl-10 hover:underline" href="/usr/member/login">로그인</a>
+	</c:if>
+	<c:if test="${sessionScope.member != null }">
+		<a class="pr-10 pl-10 hover:underline" href="/usr/member/logout">로그아웃</a>
+	</c:if>
 	</div>
 </div>
