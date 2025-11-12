@@ -2,11 +2,12 @@ package com.example.demo.util;
 
 public class Util {
 	public static String jsReplace(String msg, String uri) {
-		
-		if(msg == "") {
+
+		if (msg == null) {
 			msg = "";
 		}
-		if(uri == null || uri.length() == 0) {
+		
+		if (uri == null || uri.length() == 0) {
 			uri = "/";
 		}
 		
@@ -14,19 +15,23 @@ public class Util {
 				<script>
 					const msg = '%s'.trim();
 					
-					if(msg.length > 0){
-						alert(msg);
+					if (msg.length > 0) {
+						requestAnimationFrame(() => {
+							alert(msg);
+						})
 					}
 					
 					const uri = '%s'.trim();
 					
-					if(uri == 'hb'){
+					if (uri == 'hb') {
 						history.back();
 					}
 					
-					location.replace(uri);
+					setTimeout(() => {
+						location.replace(uri);
+					}, 100);
+					
 				</script>
 				""", msg, uri);
-		
 	}
 }

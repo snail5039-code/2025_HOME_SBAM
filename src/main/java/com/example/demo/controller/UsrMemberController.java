@@ -1,87 +1,90 @@
 package com.example.demo.controller;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.dto.Member;
+import com.example.demo.dto.Req;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.MemberService;
 import com.example.demo.util.Util;
 
-import jakarta.servlet.http.HttpSession;
-
 @Controller
 public class UsrMemberController {
-
-	private MemberService memberService;
 	
-	public UsrMemberController(MemberService memberService) {
+	private MemberService memberService;
+	private Req req;
+	
+	public UsrMemberController(MemberService memberService, Req req) {
 		this.memberService = memberService;
+		this.req = req;
 	}
 	
-	@GetMapping("usr/member/join")
+	@GetMapping("/usr/member/join")
 	public String join() {
 		return "usr/member/join";
 	}
 	
-	@GetMapping("usr/member/doJoin")
+	@PostMapping("/usr/member/doJoin")
 	@ResponseBody
 	public String doJoin(String loginId, String loginPw, String loginPwChk, String name) {
-		
+
 		this.memberService.joinMember(loginId, loginPw, name);
-		return Util.jsReplace(String.format("[%s]님의 가입이 완료되었습니다.", loginId), "/");
-	}	
+		
+		return Util.jsReplace(String.format("%s님의 가입이 완료되었습니다", loginId), "login");
+	}
 	
-	@GetMapping("usr/member/loginIdDupChk")
+	@GetMapping("/usr/member/loginIdDupChk")
 	@ResponseBody
-	public ResultData<String> loginIdDupChk(String loginId) {
+	public ResultData loginIdDupChk(String loginId) {
 		
 		Member member = this.memberService.getMemberByLoigId(loginId);
 		
-		if(member != null) {
-			return new ResultData<>("F-1", String.format("[ %s ]는 이미 사용중인 아이디입니다.", loginId), loginId);
+		if (member != null) {
+			return new ResultData<>("F-1", String.format("[ %s ]은(는) 이미 사용중인 아이디입니다", loginId));
 		}
-		return new ResultData<>("S-1", String.format("[ %s ]는 사용 가능한 아이디입니다.", loginId), loginId);
+		return new ResultData<>("S-1", String.format("[ %s ]은(는) 사용 가능한 아이디입니다", loginId));
 	}
 	
-	@GetMapping("usr/member/login")
+	@GetMapping("/usr/member/login")
 	public String login() {
 		return "usr/member/login";
 	}
 	
-	@GetMapping("usr/member/validLoginInfo")
+	@PostMapping("/usr/member/validLoginInfo")
 	@ResponseBody
-	public ResultData<Integer> validLoginInfo (String loginId, String loginPw) {
+	public ResultData<Integer> validLoginInfo(String loginId, String loginPw) {
 		
 		Member member = this.memberService.getMemberByLoigId(loginId);
 		
-		if(member == null) {
-			return new ResultData<>("F-1", String.format("[ %s ]는 존재하지 않는 아이디입니다.", loginId));
+		if (member == null) {
+			return new ResultData<>("F-1", String.format("[ %s ]은(는) 존재하지 않는 아이디입니다", loginId));
 		}
 		
-		if(!member.getLoginPw().equals(loginPw)) {
-			return new ResultData<>("F-2", "비밀번호가 일치하지 않습니다.");
+		if (!member.getLoginPw().equals(loginPw)) {
+			return new ResultData<>("F-2", "비밀번호가 일치하지 않습니다");
 		}
+		
 		return new ResultData<>("S-1", "로그인 가능", member.getId());
 	}
 	
-	@GetMapping("usr/member/doLogin")
+	@PostMapping("/usr/member/doLogin")
 	@ResponseBody
-	public String doLogin(HttpSession session, int loginedMemberId, String loginId) {
+	public String doLogin(int loginedMemberId, String loginId) {
 		
-		session.setAttribute("loginedMemberId", loginedMemberId);
+		this.req.login(loginedMemberId);
 		
-		return Util.jsReplace(String.format("[%s]님 환영합니다.", loginId), "/");
+		return Util.jsReplace(String.format("[ %s ] 님 환영합니다~!", loginId), "/");
 	}
 	
-	@GetMapping("usr/member/logout")
+	@GetMapping("/usr/member/logout")
 	@ResponseBody
-	public String logout(HttpSession session) {
-		session.invalidate();
+	public String logout() {
 		
-		return Util.jsReplace("정상적으로 로그아웃 되었습니다." ,"/"); 
+		this.req.logout();
+		
+		return Util.jsReplace("정상적으로 로그아웃 되었습니다", "/");
 	}
-	
 }
