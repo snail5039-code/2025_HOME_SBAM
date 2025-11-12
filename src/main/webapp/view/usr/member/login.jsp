@@ -2,21 +2,48 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <script>
-	const joinFormSubmit = function (form) {
+	const loginFormSubmit = function (form) {
 		form.loginId.value = form.loginId.value.trim(); 
 		form.loginPw.value = form.loginPw.value.trim(); 
 		
 		if(form.loginId.value.length == 0){
 			alert('아이디는 필수 입력 정보 입니다.');
 			form.loginId.focus();
-			return false;
+			return;
 		}
 		if(form.loginPw.value.length == 0){
 			alert('비밀번호는 필수 입력 정보 입니다.');
 			form.loginId.focus();
-			return false;
+			return;
 		}
-		return true;
+		
+		let validLoginInfoMsg = $('#validLoginInfoMsg');
+		
+		$.ajax({
+			url : '/usr/member/validLoginInfo',
+			type : 'get',
+			data : {
+				loginId : form.loginId.value,
+				loginPw : form.loginPw.value	
+			},
+			dataType : 'json',
+			success : function(data) {
+				if(data.fail) {
+					validLoginInfoMsg.addClass('text-red-500');
+					validLoginInfoMsg.html(`\${data.rsMsg}`);
+				} else {
+					validLoginInfoMsg.removeClass('text-red-500');
+					validLoginInfoMsg.empty();
+					
+					$(form).append(`<input type='hidden'  name='loginedMemberId' value='\${data.rsData}'/>`);
+					form.submit();
+				}
+			},
+			error : function(xhr, status, error) {
+				console.log(error);
+			}
+		})
+		
 	}
 </script>
 
@@ -26,7 +53,7 @@
 	<div class="text-center text-3xl p-7">로그인</div>
 	<div  class="container flex justify-center text-center">
 		<section>
-			<form action="/usr/member/doLogin" onsubmit="return joinFormSubmit(this)">
+			<form action="/usr/member/doLogin" onsubmit="loginFormSubmit(this); return false;">
 				<table border="1" class="w-250">
 					<tr>
 						<th>아이디</th>
@@ -40,7 +67,8 @@
 					</tr>
 					<tr class="border-none" >
 						<th colspan="2" class="border-none">
-							<button>로그인</button>
+							<div id="validLoginInfoMsg" class="mb-2 text-sm h-5"></div>
+							<button class="submitBtn">로그인</button>
 						</th>
 					</tr>
 				</table>

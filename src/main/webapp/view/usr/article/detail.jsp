@@ -22,6 +22,10 @@
 				<td>${article.getUpdateDate() }</td>
 			</tr>
 			<tr>
+				<th>작성자</th>
+				<td>${article.getWriterName() }</td>
+			</tr>
+			<tr>
 				<th>제목</th>
 				<td>${article.getTitle() }</td>
 			</tr>
@@ -32,10 +36,11 @@
 		</table>
 		<div class="container text-right pt-5 text-xl">
 			<a class="pl-2 pr-2 border-2 rounded-md" href="/usr/home/main">홈</a>
-			<a class="pl-2 pr-2 border-2 rounded-md" href="/usr/article/write">작성</a>
-			<a class="pl-2 pr-2 border-2 rounded-md" href="/usr/article/modify?id=${article.getId() }">수정</a>
+			<c:if test="${sessionScope.loginedMemberId == article.getMemberId() }">
+				<a class="pl-2 pr-2 border-2 rounded-md" href="/usr/article/modify?id=${article.getId() }">수정</a>
+				<a class="pl-2 pr-2 border-2 rounded-md" href="/usr/article/delete?id=${article.getId()}" onclick="if(confirm('정말 삭제 하겠습니까?') == false)return false">삭제</a>
+			</c:if>
 			<a class="pl-2 pr-2 border-2 rounded-md" onclick="history.back()">뒤로가기</a>
-			<a class="pl-2 pr-2 border-2 rounded-md" href="/usr/article/delete?id=${article.getId()}" onclick="if(confirm('정말 삭제 하겠습니까?') == false)return false">삭제</a>
 		</div>
 	</section>	
 </div>			

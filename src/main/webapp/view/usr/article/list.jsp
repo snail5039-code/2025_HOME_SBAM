@@ -11,19 +11,23 @@
 			<tr>
 				<th>번호</th>
 				<th>제목</th>
+				<th>작성자</th>
 				<th>작성일</th>
 			</tr>
 			<c:forEach items="${articles }" var="article">
 				<tr>
 					<td>${article.getId() }</td>   
-					<td><a href="/usr/article/detail?id=${article.getId() }">${article.getTitle() }</a></td>   
+					<td><a href="/usr/article/detail?id=${article.getId() }">${article.getTitle() }</a></td>  
+					<td>${article.getWriterName() }</td> 
 					<td>${article.getRegDate() }</td>   
 				</tr>
 			</c:forEach>
 		</table>
 		<div class="container text-right pt-5 text-xl">
 			<a class="pl-2 pr-2 border-2 rounded-md" href="/usr/home/main">홈</a>
-			<a class="pl-2 pr-2 border-2 rounded-md" href="/usr/article/write">작성</a>
+			<c:if test="${sessionScope.loginedMemberId != null }">
+				<a class="pl-2 pr-2 border-2 rounded-md" href="/usr/article/write">작성</a>
+			</c:if>
 			<a class="pl-2 pr-2 border-2 rounded-md" onclick="history.back()">뒤로가기</a>
 		</div>
 	</section>

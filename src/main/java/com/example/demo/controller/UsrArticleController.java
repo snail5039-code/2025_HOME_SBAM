@@ -11,6 +11,8 @@ import com.example.demo.dto.Article;
 import com.example.demo.service.ArticleService;
 import com.example.demo.util.Util;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class UsrArticleController {
 
@@ -27,9 +29,9 @@ public class UsrArticleController {
 	
 	@GetMapping("usr/article/doWrite")
 	@ResponseBody
-	public String write(String title, String content) {
+	public String write(HttpSession session ,String title, String content) {
 		
-		this.articleService.write(title, content);
+		this.articleService.write(title, content, (int) session.getAttribute("loginedMemberId"));
 		
 		int id = this.articleService.getLastArticleId();
 		return Util.jsReplace(String.format("%d번 게시글을 작성 했습니다.", id), String.format("detail?id=%d", id));

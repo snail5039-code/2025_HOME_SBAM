@@ -17,22 +17,29 @@ public interface ArticleDao {
 			INSERT INTO article 
 				SET regDate = now()
 					, updateDate = now()
+					, memberId = #{loginedMemberId}
 					, title = #{title}
 					, content = #{content}
 			""")
-	public void write(String title, String content); 
+	public void write(String title, String content, int loginedMemberId); 
 
 	@Select("""
-			select * 
-				from article
+			select a.*
+			 		, m.loginId as writerName
+				from article as a
+				inner join member as m
+				on a.memberId = m.id
 				order by id desc
 			""")
 	public List<Article> listArticle();
 
 	@Select("""
-			select *
-				from article
-				where id = #{id}
+			select a.*
+					, m.loginId as writerName
+				from article as a
+				inner join member as m
+				on a.memberId = m.id
+				where a.id = #{id}
 			""")
 	public Article getArticleById(int id);
 	
